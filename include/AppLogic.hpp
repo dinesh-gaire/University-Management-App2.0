@@ -16,19 +16,20 @@ void handleLogin(AppState &state)
 
     if (Button({670, 620, 70, 40}, "Login"))
     {
-        if (strcmp(state.username, "admin") == 0 && strcmp(state.password, "admin") == 0)
-        {
-            state.isAdmin = true;
-            state.currentScreen = Screen::MENU;
-        }
-        else if (strcmp(state.username, "student") == 0 && strcmp(state.password, "student") == 0)
-        {
-            state.isAdmin = false;
-            state.currentScreen = Screen::MENU;
-        }
-        else
-        {
-            DrawText("Invalid credentials", 300, 400, 20, RED);
+        UserType userType = Authentication::authenticateUser(state.username, state.password);
+        
+        switch (userType) {
+            case UserType::ADMIN:
+                state.currentUserType = UserType::ADMIN;
+                state.currentScreen = Screen::MENU;
+                break;
+            case UserType::STUDENT:
+                state.currentUserType = UserType::STUDENT;
+                state.currentScreen = Screen::MENU;
+                break;
+            case UserType::INVALID:
+                DrawText("Invalid credentials", 500, 700, 40, RED);
+                break;
         }
     }
 
@@ -48,7 +49,7 @@ void handleLogin(AppState &state)
 
 void handleMenu(AppState &state)
 {
-    if (state.isAdmin)
+    if (state.currentUserType == UserType::ADMIN)
     {
         DrawText("Admin Menu", 1400 / 2 - 100, 50, 40, DARKGRAY);
         if (Button({1400 / 2 - 100, 200, 200, 40}, "Students"))
@@ -60,7 +61,7 @@ void handleMenu(AppState &state)
         if (Button({1400 / 2 - 100, 500, 200, 40}, "Logout"))
             state.currentScreen = Screen::LOGIN;
     }
-    else
+    else if(state.currentUserType == UserType::STUDENT)
     {
         DrawText("Student Menu", 1400 / 2 - 100, 50, 40, DARKGRAY);
         if (Button({1400 / 2 - 100, 200, 220, 45}, "Display Students"))

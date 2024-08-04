@@ -6,6 +6,7 @@
 #include "Course.hpp"
 #include "Faculty.hpp"
 #include "FileHandler.hpp"
+#include "Authentication.hpp"
 #include <fstream>
 #include<cstring>
 
@@ -27,7 +28,9 @@ public:
     std::vector<Faculty> faculty;
     std::map<std::string, std::map<std::string, bool>> attendance;
 
-    AppState() : currentScreen(Screen::LOGIN), idActive(true), usernameActive(true), dateActive(false), isAdmin(false) {
+    UserType currentUserType;
+
+    AppState() : currentScreen(Screen::LOGIN), idActive(true), usernameActive(true), dateActive(false), currentUserType(UserType::INVALID) {
         memset(inputId, 0, sizeof(inputId));
         memset(inputName, 0, sizeof(inputName));
         memset(username, 0, sizeof(username));
