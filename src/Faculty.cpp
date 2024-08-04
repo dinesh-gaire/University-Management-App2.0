@@ -1,15 +1,11 @@
 #include "Faculty.hpp"
 
-Faculty::Faculty(const std::string& id, const std::string& name) : id(id), name(name) {}
+Faculty::Faculty(const std::string& id, const std::string& name) : Person(name), id(id) {}
 
 std::string Faculty::getId() const {
     return id;
 }
 
-std::string Faculty::getName() const {
-    return name;
-}
-
-void Faculty::setName(const std::string& name) {
-    this->name = name;
+void Faculty::setId(const std::string& id) {
+    this->id = id;
 }

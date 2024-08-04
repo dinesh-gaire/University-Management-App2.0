@@ -1,15 +1,12 @@
 #include "Student.hpp"
 
-Student::Student(const std::string& id, const std::string& name) : id(id), name(name) {}
+Student::Student(const std::string& id, const std::string& name)
+    : Person(name), id(id) {}
 
 std::string Student::getId() const {
     return id;
 }
 
-std::string Student::getName() const {
-    return name;
-}
-
-void Student::setName(const std::string& name) {
-    this->name = name;
+void Student::setId(const std::string& id) {
+    this->id = id;
 }

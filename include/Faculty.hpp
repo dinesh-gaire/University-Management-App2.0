@@ -1,16 +1,14 @@
 #pragma once
+#include "Person.hpp"
 #include <string>
 
-class Faculty {
+class Faculty: public Person {
 public:
     Faculty(const std::string& id, const std::string& name);
 
     std::string getId() const;
-    std::string getName() const;
-    void setName(const std::string& name);
+    void setId(const std::string& id);
 
 private:
     std::string id;
-    std::string name;
 };
-
