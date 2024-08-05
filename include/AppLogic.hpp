@@ -5,8 +5,20 @@
 #include <cstring>
 #include <string>
 
+void clearLoginFields(AppState& state) {
+    memset(state.username, 0, sizeof(state.username));
+    memset(state.password, 0, sizeof(state.password));
+    state.usernameActive = true;  // Reset focus to username field
+}
+
 void handleLogin(AppState &state)
 {
+
+    if (state.currentScreen == Screen::LOGIN && !state.isLoggedIn) {
+        clearLoginFields(state);
+        state.isLoggedIn = true;
+    }
+
     DrawText("University Management System", 250, 50, 60, DARKGRAY);
     DrawText("Login", 650, 250, 45, DARKGRAY);
     DrawText("Username:", 450, 400, 30, DARKGRAY);
@@ -17,19 +29,20 @@ void handleLogin(AppState &state)
     if (Button({670, 620, 70, 40}, "Login"))
     {
         UserType userType = Authentication::authenticateUser(state.username, state.password);
-        
-        switch (userType) {
-            case UserType::ADMIN:
-                state.currentUserType = UserType::ADMIN;
-                state.currentScreen = Screen::MENU;
-                break;
-            case UserType::STUDENT:
-                state.currentUserType = UserType::STUDENT;
-                state.currentScreen = Screen::MENU;
-                break;
-            case UserType::INVALID:
-                DrawText("Invalid credentials", 500, 700, 40, RED);
-                break;
+
+        switch (userType)
+        {
+        case UserType::ADMIN:
+            state.currentUserType = UserType::ADMIN;
+            state.currentScreen = Screen::MENU;
+            break;
+        case UserType::STUDENT:
+            state.currentUserType = UserType::STUDENT;
+            state.currentScreen = Screen::MENU;
+            break;
+        case UserType::INVALID:
+            DrawText("Invalid credentials", 500, 700, 40, RED);
+            break;
         }
     }
 
@@ -58,10 +71,12 @@ void handleMenu(AppState &state)
             state.currentScreen = Screen::COURSE_MENU;
         if (Button({1400 / 2 - 100, 300, 200, 40}, "Faculty"))
             state.currentScreen = Screen::FACULTY_MENU;
-        if (Button({1400 / 2 - 100, 500, 200, 40}, "Logout"))
+        if (Button({1400 / 2 - 100, 500, 200, 40}, "Logout")){
+            state.isLoggedIn = false;
             state.currentScreen = Screen::LOGIN;
+        }
     }
-    else if(state.currentUserType == UserType::STUDENT)
+    else if (state.currentUserType == UserType::STUDENT)
     {
         DrawText("Student Menu", 1400 / 2 - 100, 50, 40, DARKGRAY);
         if (Button({1400 / 2 - 100, 200, 220, 45}, "Display Students"))
@@ -72,8 +87,10 @@ void handleMenu(AppState &state)
             state.currentScreen = Screen::DISPLAY_FACULTY;
         if (Button({1400 / 2 - 100, 380, 220, 45}, "Display Attendance"))
             state.currentScreen = Screen::DISPLAY_ATTENDANCE;
-        if (Button({1400 / 2 - 100, 580, 200, 45}, "Logout"))
+        if (Button({1400 / 2 - 100, 580, 200, 45}, "Logout")){
+            state.isLoggedIn = false;
             state.currentScreen = Screen::LOGIN;
+        }
     }
 }
 
@@ -420,7 +437,7 @@ void handleAddFaculty(AppState &state)
         }
     }
 
-    if (Button({600 - 40, 410, 200, 40}, "Back"))
+    if (Button({600 - 40, 470, 200, 40}, "Back"))
     {
         memset(state.inputId, 0, sizeof(state.inputId));
         memset(state.inputName, 0, sizeof(state.inputName));

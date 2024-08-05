@@ -22,6 +22,7 @@ public:
     bool usernameActive;
     bool dateActive;
     bool isAdmin;
+    bool isLoggedIn;
 
     std::vector<Student> students;
     std::vector<Course> courses;
@@ -30,7 +31,7 @@ public:
 
     UserType currentUserType;
 
-    AppState() : currentScreen(Screen::LOGIN), idActive(true), usernameActive(true), dateActive(false), currentUserType(UserType::INVALID) {
+    AppState() : currentScreen(Screen::LOGIN), idActive(true), isLoggedIn(false), usernameActive(true), dateActive(false), currentUserType(UserType::INVALID) {
         memset(inputId, 0, sizeof(inputId));
         memset(inputName, 0, sizeof(inputName));
         memset(username, 0, sizeof(username));
@@ -76,3 +77,5 @@ public:
         }
     }
 };
+
+//This AppState class handles the application's state management, including user input fields, data storage (students, courses, faculty), and attendance tracking. It provides methods to load and save data from files, ensuring that the state is maintained between application runs.
